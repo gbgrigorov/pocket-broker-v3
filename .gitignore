@@ -38,3 +38,4 @@ sourcing/data/agencies.json
 # Kept on disk because they are how a finding was reached, but they are not
 # part of the project — the durable versions live in market/ as commands.
 *_tmp.py
+upload/
