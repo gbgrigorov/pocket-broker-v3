@@ -1,0 +1,4 @@
+# Pinned to match ~/Dev/broker-crm, so a fix can move between the two projects
+# without a version difference being the reason it does not apply.
+django==6.1.1
+psycopg[binary]==3.3.5

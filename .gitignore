@@ -1,0 +1,40 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Crawled data, images, page evidence. Large, regenerable, and not ours to redistribute.
+data/
+*.sqlite3
+*.db
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Node / frontend
+node_modules/
+dist/
+.vite/
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Carried in by the vendor copy from broker-crm: that project's client's own
+# partner registry (42 Burgas agencies). Not ours, wrong market, and it must
+# never reach this repo's history. Pending removal — see docs/VENDORING.md.
+sourcing/assets/
+sourcing/data/agencies.json
+
+# Throwaway reconnaissance scripts written while working out a site's structure.
+# Kept on disk because they are how a finding was reached, but they are not
+# part of the project — the durable versions live in market/ as commands.
+*_tmp.py

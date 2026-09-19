@@ -1,0 +1,154 @@
+/* The comp's page frame: a cool off-white ground, white cards, thin borders.
+   Everything component-level is PrimeVue's; this file only owns the shell. */
+
+:root {
+  --ink: #0f172a;
+  --ink-soft: #475569;
+  --ink-faint: #94a3b8;
+  --line: #e4eaf1;
+  --ground: #f4f7fa;
+  --card: #ffffff;
+  --navy: #173f64;
+  --good: #16a34a;
+  --warn: #d97706;
+  --check: #ea580c;
+  --bad: #b91c1c;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #app { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font: 14px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, 'Noto Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3, h4 { margin: 0; font-weight: 600; letter-spacing: -0.01em; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.card-head h3 { font-size: 0.95rem; }
+.card-body { padding: 1.1rem; }
+
+.muted { color: var(--ink-soft); }
+.faint { color: var(--ink-faint); }
+.tiny { font-size: 0.75rem; }
+.small { font-size: 0.8125rem; }
+.mono-num { font-variant-numeric: tabular-nums; }
+
+.row { display: flex; align-items: center; gap: 0.5rem; }
+.col { display: flex; flex-direction: column; gap: 0.5rem; }
+.spread { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.wrap { flex-wrap: wrap; }
+.grow { flex: 1 1 auto; min-width: 0; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.field-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-bottom: 0.3rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.14rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.tag {
+  display: inline-flex;
+  padding: 0.12rem 0.45rem;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: var(--ink-soft);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+/* Wide content scrolls inside its own box; the page never scrolls sideways. */
+.scroll-x { overflow-x: auto; }
+
+.page { max-width: 1480px; margin: 0 auto; padding: 1.25rem 1.5rem 3rem; }
+.grid-2 { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 1rem; align-items: start; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+
+@media (max-width: 1080px) {
+  .grid-2 { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* PrimeVue nudges that keep the comp's density */
+.p-datatable .p-datatable-thead > tr > th { font-size: 0.72rem; text-transform: none; color: var(--ink-soft); }
+.p-datatable .p-datatable-tbody > tr > td { padding: 0.6rem 0.75rem; }
+.p-tabs .p-tablist-tab-list { background: transparent; }
+.p-inputtext, .p-select, .p-textarea { font-size: 0.8125rem; }
+.p-button-sm { font-size: 0.78rem; }
+
+/* --- search-specific, in the same language as the shell above --- */
+
+.grid-side { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 1rem; align-items: start; }
+@media (max-width: 1080px) { .grid-side { grid-template-columns: minmax(0, 1fr); } }
+
+.rail { position: sticky; top: 5.4rem; }
+.rail-body { padding: 0.9rem 1rem 1.1rem; display: flex; flex-direction: column; gap: 0.7rem; }
+
+.list { display: flex; flex-direction: column; gap: 0.7rem; }
+
+.result-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 1rem; margin-bottom: 0.8rem; flex-wrap: wrap;
+}
+.result-head h1 { font-size: 1.25rem; }
+.result-head .count { color: var(--ink-soft); font-weight: 500; }
+
+.empty { display: grid; place-items: center; gap: 0.8rem; padding: 4rem 1rem; text-align: center; }
+.loading { display: grid; place-items: center; padding: 4rem; }
+
+.seg { display: grid; grid-auto-flow: column; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button {
+  padding: 0.45rem 0.5rem; border: 0; background: #fff; cursor: pointer;
+  font: inherit; font-size: 0.8125rem; color: var(--ink-soft);
+}
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button.on { background: #eff6fb; color: #1f6299; font-weight: 600; }
+
+.kindlist { display: flex; flex-direction: column; gap: 0.2rem; }
+.kindlist button {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+  padding: 0.35rem 0.5rem; border: 1px solid transparent; border-radius: 6px;
+  background: none; cursor: pointer; font: inherit; font-size: 0.8125rem;
+  color: var(--ink); text-align: left;
+}
+.kindlist button:hover { background: var(--ground); }
+.kindlist button.on { background: #eff6fb; border-color: #aed0ea; color: #1f6299; font-weight: 600; }
+.kindlist .n { color: var(--ink-faint); font-size: 0.72rem; font-variant-numeric: tabular-nums; }
+
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+.rail-note { margin: 0.3rem 0 0; font-size: 0.7rem; line-height: 1.45; color: var(--ink-faint); }
