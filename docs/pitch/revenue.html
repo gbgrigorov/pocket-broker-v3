@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Varna Market — Revenue & Operating Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F5EED9; --surface:#FFFFFF; --ink:#0D0D0D;
+    --pink:#FF3366; --teal:#00D4CC; --coral:#FF6B47; --blue:#2B6BFF;
+    --grey:#C4C4C4; --mute:#6B6459;
+    --disp:'Barlow Condensed','Arial Narrow',Helvetica,Arial,sans-serif;
+    --head:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--ink);font-family:var(--head);color:var(--ink);overflow:hidden}
+  #stage{position:absolute;top:50%;left:50%;width:1280px;height:720px;
+    transform-origin:center center;background:var(--cream);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:52px 62px;display:none;flex-direction:column}
+  .slide.on{display:flex}
+
+  .kicker{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--pink);margin:0 0 14px}
+  .kicker.teal{color:#00857f}
+  h1{font-family:var(--disp);font-weight:800;text-transform:uppercase;
+    font-size:100px;line-height:.92;letter-spacing:-.5px;margin:0}
+  h2{font-family:var(--disp);font-weight:800;text-transform:uppercase;
+    font-size:58px;line-height:.96;letter-spacing:-.3px;margin:0 0 20px}
+  h2.sm{font-size:46px}
+  .lede{font-size:24px;line-height:1.42;max-width:1010px;margin:0}
+  .lede b{background:var(--pink);color:#fff;padding:0 7px}
+  .lede em{font-style:normal;border-bottom:4px solid var(--teal)}
+  p{margin:0 0 15px}
+  .sub{font-size:18px;line-height:1.5;color:var(--mute);max-width:960px}
+  .mono{font-family:var(--mono)}
+  .fill{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .grow{flex:1;align-content:center}
+
+  .card{background:var(--surface);border:3px solid var(--ink);
+    box-shadow:8px 8px 0 var(--ink);padding:20px 22px}
+  .card h3{font-family:var(--disp);text-transform:uppercase;font-weight:800;
+    font-size:27px;line-height:1.02;margin:0 0 9px}
+  .card p{font-size:16px;line-height:1.45;margin:0;color:#2a2a2a}
+  .grid{display:grid;gap:18px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:1fr 1fr}
+  .tag{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:700;
+    letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border:2px solid var(--ink)}
+  .tag.pink{background:var(--pink);color:#fff;border-color:var(--pink)}
+  .tag.teal{background:var(--teal)}
+  .tag.coral{background:var(--coral);color:#fff;border-color:var(--coral)}
+  .bar-accent{height:14px;border:3px solid var(--ink);display:flex;margin-bottom:24px}
+  .bar-accent i{flex:1}
+
+  .stat{background:var(--surface);border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);
+    padding:15px 17px}
+  .stat .n{font-family:var(--disp);font-weight:800;font-size:52px;line-height:.9;letter-spacing:-1px}
+  .stat .l{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--mute);margin-top:8px;line-height:1.35}
+  .stat.pink .n{color:var(--pink)} .stat.teal .n{color:#00857f}
+  .stat.coral .n{color:var(--coral)} .stat.blue .n{color:var(--blue)}
+
+  .layer{display:flex;align-items:stretch;border:3px solid var(--ink);
+    background:var(--surface);box-shadow:6px 6px 0 var(--ink);margin-bottom:12px}
+  .layer .num{width:58px;flex:none;display:flex;align-items:center;justify-content:center;
+    font-family:var(--disp);font-weight:800;font-size:34px;color:#fff;border-right:3px solid var(--ink)}
+  .layer .body{padding:12px 17px;flex:1}
+  .layer .body h4{font-family:var(--disp);text-transform:uppercase;font-weight:800;
+    font-size:24px;margin:0 0 3px;line-height:1}
+  .layer .body p{font-size:15px;line-height:1.4;color:#2a2a2a;margin:0}
+  .layer .amt{flex:none;width:186px;display:flex;align-items:center;justify-content:flex-end;
+    padding:0 18px;border-left:3px solid var(--ink);font-family:var(--disp);font-weight:800;
+    font-size:27px;text-align:right;line-height:1.05}
+  .layer .amt u{text-decoration:none;display:block}
+  .layer .amt small{display:block;font-size:12.5px;font-family:var(--mono);
+    font-weight:400;color:var(--mute);margin-top:4px;letter-spacing:.04em}
+
+  table.money{width:100%;border-collapse:collapse;font-size:16px;background:var(--surface);
+    border:3px solid var(--ink);box-shadow:8px 8px 0 var(--ink)}
+  table.money th,table.money td{padding:9px 14px;border-bottom:2px solid #e9e2cd;text-align:left}
+  table.money th{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--mute);background:var(--cream);
+    border-bottom:3px solid var(--ink)}
+  table.money td.n,table.money th.n{text-align:right;font-family:var(--mono);
+    font-variant-numeric:tabular-nums}
+  table.money tr.total td{border-top:3px solid var(--ink);border-bottom:0;
+    font-weight:700;font-size:18px;background:#fffdf5}
+  table.money tr:last-child td{border-bottom:0}
+
+  .foot{font-family:var(--mono);font-size:12px;color:var(--mute);margin-top:auto;
+    padding-top:14px;line-height:1.5}
+
+  #notes{position:fixed;right:0;top:0;bottom:0;width:390px;background:#111;color:#eee;
+    padding:22px;overflow:auto;font-size:13.5px;line-height:1.55;display:none;z-index:9}
+  #notes.on{display:block}
+  #notes h5{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--teal);margin:0 0 10px}
+  #notes .v{color:#9aa;margin-top:14px;font-size:12.5px}
+  #hud{position:fixed;left:14px;bottom:12px;font-family:var(--mono);font-size:11.5px;
+    color:#8a8a8a;z-index:9}
+
+  @page{size:1280px 720px;margin:0}
+  @media print{
+    body{background:#fff;overflow:visible}
+    #stage{position:static;transform:none!important;width:1280px;height:720px}
+    .slide{display:flex!important;position:relative;page-break-after:always;height:720px}
+    #notes,#hud{display:none!important}
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+
+<!-- 1 -->
+<section class="slide on">
+  <div class="bar-accent"><i style="background:var(--pink)"></i><i style="background:var(--teal)"></i><i style="background:var(--coral)"></i><i style="background:var(--blue)"></i></div>
+  <div class="fill">
+    <p class="kicker">Varna Market · Септември 2026</p>
+    <h1>Как<br>печелим</h1>
+    <p class="lede" style="margin-top:26px">Три модела, един екип, дванадесет месеца.</p>
+  </div>
+  <p class="foot">Всички оферти идват директно от сайта на агенцията. Нула портали.</p>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <p class="kicker">01 · Първият инстинкт е грешен</p>
+  <h2>Абонамент от купувача<br>ни оставя без лост</h2>
+  <div class="grid g3 grow">
+    <div class="card"><h3>Слаба готовност</h3><p>Купувачът търси три месеца и си тръгва. Насреща има безплатни портали. Цената, която ще плати, е малка — и еднократна.</p></div>
+    <div class="card"><h3>Плащаща стена<br>убива търсенето</h3><p>Трафикът е активът. Той е причината агенциите да се съобразяват с нас. Зад плащаща стена няма трафик.</p></div>
+    <div class="card" style="border-color:var(--pink);box-shadow:8px 8px 0 var(--pink)"><h3>Лостът е друг</h3><p>Ние индексираме агенциите <em>без тяхно разрешение</em>. Те не могат да ни спрат предлагането. Значи не им дължим и разрешение да продаваме търсенето.</p></div>
+  </div>
+  <p class="foot">Затова: <b style="background:var(--teal);padding:0 6px">за купувача — безплатно, завинаги.</b> Безплатното търсене е лостът, не разходът.</p>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <p class="kicker">02 · Три модела</p>
+  <h2>Кой плаща и за какво</h2>
+  <div class="grow">
+    <div class="layer">
+      <div class="num" style="background:var(--pink)">1</div>
+      <div class="body"><h4>Насочени запитвания</h4>
+        <p>Купувачът заявява интерес → подаваме го на агенцията. Плаща се при резултат: такса на запитване или дял от комисионата.</p></div>
+      <div class="amt" style="color:var(--pink)"><u>20–40 €<small>на запитване</small></u></div>
+    </div>
+    <div class="layer">
+      <div class="num" style="background:#00857f">2</div>
+      <div class="body"><h4>Пазарни данни</h4>
+        <p>Банки, оценители, строители и инвеститори купуват това, което никой в България няма: чисти офертни цени, време на пазара, движение по квартали.</p></div>
+      <div class="amt" style="color:#00857f"><u>500–1 500 €<small>на месец</small></u></div>
+    </div>
+    <div class="layer">
+      <div class="num" style="background:var(--coral)">3</div>
+      <div class="body"><h4>Абонамент за агенции</h4>
+        <p>Видимост, приоритет при запитванията, аналитика за собственото им портфолио спрямо пазара.</p></div>
+      <div class="amt" style="color:var(--coral)"><u>99–299 €<small>на месец</small></u></div>
+    </div>
+  </div>
+  <p class="foot">Оценки по пазарни нива, не оферти. Комисионата в България е ~3% от цената — при 150 000 € това е ~4 500 € на сделка.</p>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <p class="kicker">03 · Модел 1</p>
+  <h2 class="sm">Запитвания — единственият модел,<br>който не иска разрешение</h2>
+  <div class="grid g2 grow">
+    <div>
+      <div class="card" style="margin-bottom:16px"><h3>Защо работи</h3>
+        <p>Агенцията плаща само когато печели. Няма преговор за достъп, няма договор преди старта — а ние вече държим предлагането.</p></div>
+      <div class="card"><h3>Защо е крехко</h3>
+        <p>Приписването е трудно: сделката се случва офлайн. Нужна е проследимост на запитването и доверие от двете страни.</p></div>
+    </div>
+    <div class="grid" style="gap:14px;align-content:center">
+      <div class="stat pink"><div class="n">200</div><div class="l">запитвания / месец<br>при ~10 000 посетители и 2% конверсия</div></div>
+      <div class="stat teal"><div class="n">6 000 €</div><div class="l">месечен приход при 30 € на запитване</div></div>
+      <div class="stat coral"><div class="n">72 000 €</div><div class="l">годишно, при задържано ниво</div></div>
+    </div>
+  </div>
+  <p class="foot">Илюстративен сценарий при постигнат трафик, не прогноза. Трафикът е допускането, което трябва да се докаже първо.</p>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <p class="kicker teal">04 · Модел 2</p>
+  <h2 class="sm">Данните са най-високият марж —<br>и никой не ги има</h2>
+  <p class="lede" style="margin-bottom:22px">Порталите не могат да продават този продукт. Техните данни съдържат <b>до 50% фалшиви и дублирани оферти</b> — точно затова нашите струват пари.</p>
+  <div class="grid g3 grow">
+    <div class="card"><h3>Банки и оценители</h3><p>Реални офертни цени по квартали за ипотечна оценка. Днес се ползват портали, за които всеки знае, че не са верни.</p></div>
+    <div class="card"><h3>Строители</h3><p>На каква цена да пуснат следващия проект. Колко държи конкуренцията, колко време стои непродадено.</p></div>
+    <div class="card"><h3>Инвеститори</h3><p>Движение на цените по квартал и тип, без да се чака НСИ.</p></div>
+  </div>
+  <p class="foot">10 клиента × 800 € = <b style="background:var(--teal);padding:0 6px">8 000 € на месец</b> · почти нулева поддръжка · продава се със същата база, която захранва сайта.</p>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <p class="kicker" style="color:var(--coral)">05 · Модел 3</p>
+  <h2 class="sm">Абонаментът за агенции е последен —<br>и това е нарочно</h2>
+  <div class="grid g2 grow">
+    <div class="card"><h3>Силата идва<br>от трафика</h3><p>Агенция плаща за видимост само когато вече праща клиенти. Преди това продаваме нещо, което не притежаваме.</p></div>
+    <div class="card" style="border-color:var(--coral);box-shadow:8px 8px 0 var(--coral)"><h3>Риск от конфликт</h3><p>Щом им продаваме позиция, започват да искат и премахване. Индексът трябва да е достатъчно силен, за да не е това заплаха.</p></div>
+  </div>
+  <p class="foot">50 агенции × 150 € = 7 500 €/мес. Адресуеми: ~230 във Варна, хиляди в страната — но чак след като трафикът е факт.</p>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <p class="kicker">06 · Препоръка</p>
+  <h2>Редът има значение</h2>
+  <div class="grow">
+    <div class="layer"><div class="num" style="background:var(--ink)">1</div>
+      <div class="body"><h4>Месеци 1–6 · Запитвания</h4><p>Не иска разрешение от никого. Започва да носи приход в момента, в който има трафик.</p></div></div>
+    <div class="layer"><div class="num" style="background:#00857f">2</div>
+      <div class="body"><h4>Месеци 6–12 · Данни</h4><p>Друг клиент, друг бюджет, нулев конфликт с агенциите. Най-висок марж.</p></div></div>
+    <div class="layer"><div class="num" style="background:var(--coral)">3</div>
+      <div class="body"><h4>Месец 12+ · Абонамент за агенции</h4><p>Чак когато сме източник на клиенти, който им е нужен.</p></div></div>
+    <div class="card" style="margin-top:18px;border-color:var(--pink);box-shadow:8px 8px 0 var(--pink)">
+      <h3>Купувачът не плаща никога</h3>
+      <p>Безплатното търсене е това, което прави останалите три модела възможни. То е активът, не разходът.</p></div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <p class="kicker">07 · Екипът</p>
+  <h2 class="sm">Трима души — защото AI<br>поема четвъртия и петия</h2>
+  <div class="grid g3 grow">
+    <div class="card"><span class="tag pink">висок лост</span><h3 style="margin-top:10px">Старши<br>разработчик</h3><p>Обхождания и продукт. Тази база е построена така — реалистично върши работата на 2–2,5 разработчика.</p></div>
+    <div class="card"><span class="tag ghost">нисък лост</span><h3 style="margin-top:10px">Ти —<br>продукт и сделки</h3><p>Агенциите, които ни блокират, са телефонен разговор, не технически проблем. Това AI не го върши.</p></div>
+    <div class="card"><span class="tag teal">много висок лост</span><h3 style="margin-top:10px">Маркетинг<br>и растеж</h3><p>Органичното търсене е каналът при имотите. Програмният SEO върху структурирани данни е почти безплатен на мащаб.</p></div>
+  </div>
+  <p class="foot">AI свива силно строежа и мащабирането. Не свива преговорите с агенция. Не го залагай като плосък множител.</p>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <p class="kicker">08 · Една година</p>
+  <h2 class="sm">Разход за 12 месеца</h2>
+  <div class="grow" style="display:flex;gap:20px;align-items:flex-start">
+    <table class="money" style="flex:1.35">
+      <tr><th>Позиция</th><th class="n">Мес. 1–3</th><th class="n">Мес. 4–12</th></tr>
+      <tr><td>Старши разработчик</td><td class="n">5 500</td><td class="n">5 500</td></tr>
+      <tr><td>Основател (ти)</td><td class="n">2 000</td><td class="n">2 000</td></tr>
+      <tr><td>Маркетинг и растеж</td><td class="n">—</td><td class="n">2 500</td></tr>
+      <tr><td>Инфраструктура</td><td class="n">150</td><td class="n">400</td></tr>
+      <tr><td>AI (Claude Code + API)</td><td class="n">400</td><td class="n">600</td></tr>
+      <tr><td>Счетоводство и право</td><td class="n">300</td><td class="n">350</td></tr>
+      <tr class="total"><td>Месечен разход</td><td class="n">8 350</td><td class="n">11 350</td></tr>
+    </table>
+    <div class="grid" style="flex:1;gap:14px">
+      <div class="stat blue"><div class="n">127 200 €</div><div class="l">разход за 12 месеца</div></div>
+      <div class="stat pink"><div class="n">150 000 €</div><div class="l">търсен рунд — с 18% буфер</div></div>
+      <div class="stat teal"><div class="n">~13 мес.</div><div class="l">писта при нулев приход</div></div>
+    </div>
+  </div>
+  <p class="foot">Български нива за външни изпълнители, брутни. Оценки, не оферти. Основателят на минимална заплата през строежа.</p>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <p class="kicker">09 · Честният риск</p>
+  <h2 class="sm">Покритието е целият риск</h2>
+  <div class="grid g2 grow">
+    <div class="card" style="border-color:var(--pink);box-shadow:8px 8px 0 var(--pink)">
+      <h3>Нищо друго няма значение,<br>докато покритието не е там</h3>
+      <p>Днес: <b>~1 800</b> оферти от 14 агенции. Пазарът във Варна е в пъти повече. Под 60% покритие нито интерфейсът, нито съвпаденията имат смисъл.</p></div>
+    <div class="card">
+      <h3>Двете най-големи<br>агенции ни блокират</h3>
+      <p>Адрес и Имотека връщат 403 на всяка заявка. Това е ~4 200 оферти и не се решава с по-добър код — решава се с разговор.</p></div>
+  </div>
+  <p class="foot">Затова редът е такъв: запитванията носят приход без разрешение, а приходът плаща разговорите.</p>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+  <div class="fill">
+    <p class="kicker">Varna Market</p>
+    <h1 style="font-size:84px">Безплатно<br>за купувача.<br>Плаща този,<br>който печели.</h1>
+  </div>
+  <div class="bar-accent" style="margin:0"><i style="background:var(--blue)"></i><i style="background:var(--coral)"></i><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i></div>
+</section>
+
+</div>
+
+<aside id="notes"><h5 id="nt"></h5><div id="ns"></div><div class="v" id="nv"></div></aside>
+<div id="hud"><span id="pg"></span> · ← → навигация · N бележки · P печат</div>
+
+<script>
+const NOTES = [
+  { t:"Заглавие", s:"Три модела, един екип, една година. Кажи го и продължи.",
+    v:"Изчакай четирите ленти да се появят." },
+  { t:"01 · Лостът", s:"Първият инстинкт е абонамент от потребителя. Той е грешен по три причини — но третата е истинската. Ние индексираме агенциите без тяхно разрешение. Те не могат да ни спрат предлагането. Значи не ни трябва и тяхното разрешение, за да продаваме търсенето.",
+    v:"Розовата карта е тезата. Останалите две са подготовка за нея." },
+  { t:"02 · Трите модела", s:"Запитвания, данни, абонамент. Различни клиенти, различни бюджети.",
+    v:"Ако инвеститорът прекъсне тук — това е слайдът, на който да останеш." },
+  { t:"03 · Запитвания", s:"Единственият модел, който не иска ничие разрешение. Агенцията плаща само когато печели.",
+    v:"Числата са сценарий при постигнат трафик. Кажи го на глас — не ги представяй като прогноза." },
+  { t:"04 · Данни", s:"Порталите не могат да продават този продукт, защото данните им са до половината фалшиви. Точно това прави нашите ценни.",
+    v:"Тук е връзката с Pocket Broker — същата база, втори клиент." },
+  { t:"05 · Абонамент", s:"Нарочно е последен. Преди да сме източник на трафик, продаваме нещо, което не притежаваме.",
+    v:"Ако попитат защо не започваме с него — конфликтът с предлагането е отговорът." },
+  { t:"06 · Редът", s:"Купувачът не плаща никога. Това е активът, не разходът.",
+    v:"Последната карта е изводът на цялата презентация." },
+  { t:"07 · Екипът", s:"Трима, защото AI поема четвъртия и петия. Но не навсякъде — преговорът с агенция не се автоматизира.",
+    v:"Честността тук работи в твоя полза. Инвеститорите са чували 'AI ни прави 10x'." },
+  { t:"08 · Разходът", s:"127 200 € за дванадесет месеца. Искаме 150 000 с буфер. Писта около тринадесет месеца при нулев приход.",
+    v:"Български нива, брутни, оценки. Ако попитат за Германия — числото се удвоява." },
+  { t:"09 · Рискът", s:"Покритието е целият риск. Адрес и Имотека са 4 200 оферти и ни блокират — това не е код, а разговор.",
+    v:"Кажи го преди да го попитат. Доверието си струва повече от слайда." },
+  { t:"Финал", s:"Безплатно за купувача. Плаща този, който печели.", v:"Рима с първия слайд." },
+];
+const slides=[...document.querySelectorAll('.slide')];
+const stage=document.getElementById('stage'),notes=document.getElementById('notes');
+let i=0;
+function fit(){const s=Math.min(document.documentElement.clientWidth/1300,document.documentElement.clientHeight/740);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`}
+function show(n){i=(n+slides.length)%slides.length;
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  const t=NOTES[i]||{t:'',s:'',v:''};
+  document.getElementById('nt').textContent=t.t;
+  document.getElementById('ns').textContent=t.s;
+  document.getElementById('nv').textContent=t.v;
+  document.getElementById('pg').textContent=`${i+1}/${slides.length}`}
+addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')show(i+1);
+  else if(e.key==='ArrowLeft')show(i-1);
+  else if(e.key.toLowerCase()==='n')notes.classList.toggle('on');
+  else if(e.key.toLowerCase()==='p')print()});
+addEventListener('resize',fit);
+addEventListener('click',e=>{if(!notes.contains(e.target))show(i+1)});
+fit();show(0);
+</script>
+</body>
+</html>
