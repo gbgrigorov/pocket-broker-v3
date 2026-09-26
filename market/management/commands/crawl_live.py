@@ -20,7 +20,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 from django.conf import settings
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.utils import timezone
 
@@ -59,9 +59,14 @@ def is_varna(text):
 
 
 class Command(BaseCommand):
-    help = 'Crawl live agency catalogues (no sitemaps). Varna only.'
+    help = 'Crawl live catalogues: existing Varna sources or verified Sofia adapters.'
 
     def add_arguments(self, parser):
+        parser.add_argument('--city', choices=['varna', 'sofia'], default='varna')
+        parser.add_argument('--discover-only', action='store_true')
+        parser.add_argument('--max-pages', type=int, default=100)
+        parser.add_argument('--sample-seed', type=int,
+                            help='Sofia only: reproducible shuffled detail sample with --limit')
         parser.add_argument('--agency', action='append', dest='agencies')
         parser.add_argument('--limit', type=int)
         parser.add_argument('--workers', type=int,
@@ -71,6 +76,28 @@ class Command(BaseCommand):
                             help='only sources that can be asked for newest first')
 
     def handle(self, *args, **options):
+        if options['city'] == 'sofia':
+            from market.bp_crawl import crawl as bp_crawl
+            from market.sofia_crawl import crawl as sofia_crawl
+            from market.sofia_sources import COHORT
+            wanted = list(dict.fromkeys(options['agencies'] or COHORT))
+            if options['newest_only'] or any(slug not in COHORT for slug in wanted):
+                raise CommandError(f'Sofia supports these five agencies: {", ".join(COHORT)}; newest-only is unsupported')
+            if (options['limit'] is not None and options['limit'] <= 0) or options['max_pages'] <= 0:
+                raise CommandError('limit and max-pages must be positive')
+            failed = []
+            for slug in wanted:
+                kwargs = dict(limit=options['limit'], max_pages=options['max_pages'],
+                    discover_only=options['discover_only'], no_images=options['no_images'],
+                    sample_seed=options['sample_seed'], emit=self.stdout.write)
+                run, stats = bp_crawl(**kwargs) if slug == 'bulgarian-properties' else sofia_crawl(slug, **kwargs)
+                if stats['errors'] or stats['blocked'] or stats['image_errors']:
+                    failed.append(f'{slug} #{run.pk}')
+            if failed:
+                raise CommandError(f'Errors/blocks recorded in: {", ".join(failed)}; inspect run reports')
+            return
+        if options['discover_only']:
+            raise CommandError('--discover-only is currently supported by the Sofia adapter only')
         wanted = options['agencies'] or list(sources.SOURCES)
         if options['newest_only']:
             wanted = [s for s in wanted if sources.SOURCES.get(s, {}).get('newest_first')]

@@ -1,5 +1,21 @@
 # Crawl policy
 
+## Sofia expansion checkpoint — 2026-09-26
+
+The cohort is Bulgarian Properties, Yavlena, Home2U, LUXIMMO and ARCO Real
+Estate. Public catalogues, city filters, pagination, encoding and excluded
+candidates are recorded in `sofia-crawl-map.md`. Every import creates a
+city-scoped SiteProbe containing robots verdicts, requests and outcomes.
+Existing robots configuration is unchanged. Sofia adapters use public GET
+requests without authentication and stop at the first 401/403/429/503 or page
+challenge. One worker per host, conservative spacing and existing
+access-control boundaries remain.
+Do not reuse the agency-wide retirement helper for a partial city crawl: phase 3
+must establish complete valid coverage and scope retirement by agency AND city.
+All five Sofia adapters disable missing-offer retirement entirely. An exact Sofia offer can be deactivated only on positive own-page or own unit-row sold/reserved evidence, with individual history. Missing, errored or blocked pages do not justify deactivation.
+An interrupted or blocked source cannot justify mass inactivation. The existing
+50% discovery guard alone is not enough to certify a future Sofia adapter.
+
 What this crawler does, what it refuses to do, and why — written down because
 `CRAWL_RESPECT_ROBOTS=False` is a decision someone will eventually ask about,
 and "we never thought about it" is the wrong answer.

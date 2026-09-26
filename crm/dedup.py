@@ -104,7 +104,10 @@ def find_possible_duplicates(offer, among_ids=None):
                o.area_m2, o.floor, similarity(o.title_norm, %(title)s) AS sim
         FROM sourcing_offer o
         JOIN sourcing_agency a ON a.id = o.agency_id
+        JOIN market_offergeo geo ON geo.offer_id = o.id
+        JOIN market_offergeo reference_geo ON reference_geo.offer_id = %(id)s
         WHERE o.id <> %(id)s
+          AND geo.city_id = reference_geo.city_id
           AND o.is_active
           AND o.agency_id <> %(agency)s
           AND o.location = %(location)s

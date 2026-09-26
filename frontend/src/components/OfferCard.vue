@@ -31,7 +31,7 @@ watch(() => props.offer.id, () => { broken.value = false })
 </script>
 
 <template>
-  <RouterLink :to="`/imot/${offer.id}`" class="offer">
+  <RouterLink :to="{ name: 'offer', params: { id: offer.id }, query: { city: offer.city || $route.query.city } }" class="offer">
     <div class="offer-media">
       <img
         v-if="offer.image && !broken" :src="offer.image" :alt="offer.title"
@@ -54,6 +54,7 @@ watch(() => props.offer.id, () => { broken.value = false })
           <h4 class="offer-title truncate">{{ offer.title || 'без заглавие' }}</h4>
           <p class="offer-where small muted">
             {{ offer.location || 'населено място не е посочено' }}
+            <span v-if="!offer.neighbourhood" class="tiny faint"> · кварталът не е уточнен</span>
           </p>
         </div>
         <div class="offer-price-box">

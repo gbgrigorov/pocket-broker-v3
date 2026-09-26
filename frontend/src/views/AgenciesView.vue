@@ -1,13 +1,25 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { ref, watch } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
 import { api } from '../lib/api'
 
 const rows = ref([])
 const loading = ref(true)
-onMounted(async () => {
-  try { rows.value = (await api.agencies()).agencies } finally { loading.value = false }
-})
+const route = useRoute()
+const error = ref('')
+let requestId = 0
+watch(() => route.query.city, async (city) => {
+  const request = ++requestId
+  loading.value = true
+  rows.value = []
+  error.value = ''
+  try {
+    const result = await api.agencies({ city })
+    if (request === requestId) rows.value = result.agencies
+  } catch {
+    if (request === requestId) error.value = 'Агенциите не могат да бъдат заредени.'
+  } finally { if (request === requestId) loading.value = false }
+}, { immediate: true })
 </script>
 
 <template>
@@ -27,6 +39,8 @@ onMounted(async () => {
       <i class="pi pi-spin pi-spinner" style="font-size: 1.5rem; color: #94a3b8" />
     </div>
 
+    <p v-else-if="error" role="alert">{{ error }}</p>
+    <p v-else-if="!rows.length" class="muted">Все още няма активни оферти от агенции в този град.</p>
     <div v-else class="grid-3">
       <article v-for="a in rows" :key="a.slug" class="card">
         <div class="card-head">
@@ -38,7 +52,7 @@ onMounted(async () => {
         <div class="card-body col">
           <p class="tiny muted agency-note">{{ a.notes }}</p>
           <div class="row small" style="margin-top: auto">
-            <RouterLink :to="`/?agency=${a.slug}`" style="color: #1f6299; font-weight: 600">
+            <RouterLink :to="{ name: 'search', query: { city: route.query.city, agency: a.slug } }" style="color: #1f6299; font-weight: 600">
               Офертите ѝ
             </RouterLink>
             <a v-if="a.website" :href="a.website" target="_blank" rel="noopener" class="faint">

@@ -1,0 +1,205 @@
+{
+  "notes": "Reduced factual DOM/SSR fixtures from public pages. Catalogue cards abbreviated; totals preserved. Descriptions, forms, broker contacts, biographies, scripts and tracking omitted. Home2U description reduced to relevant factual flags. Do not use these abbreviated pages as complete inventory. Reduced fixtures normalize line endings and trailing indentation; source checksums describe the original captured bytes.",
+  "captures": [
+    {
+      "adapter": "yavlena",
+      "fixture": "catalogue-sale.html",
+      "source_url": "https://www.yavlena.com/bg/sales/sofia-sofia/d23l4396",
+      "captured": "2026-09-26",
+      "source_sha256": "6a4552a815c52dd2f25fba0c0a0dc99b74ba00dffd45b2933d1454fe7f89318b",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "yavlena",
+      "fixture": "catalogue-sale-page2.html",
+      "source_url": "https://www.yavlena.com/bg/sales/sofia-sofia/d23l4396?page=1",
+      "captured": "2026-09-26",
+      "source_sha256": "283563709f63cc76f398a41c9cabfc304dd4d7005a19db346ef098a5d3a41591",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "yavlena",
+      "fixture": "catalogue-rent.html",
+      "source_url": "https://www.yavlena.com/bg/rentals/sofia-sofia/d23l4396",
+      "captured": "2026-09-26",
+      "source_sha256": "45f225e1aee0c2dd887c74334a76bf20e77d8b89406e6eef10e487a332246856",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "yavlena",
+      "fixture": "sale.html",
+      "source_url": "https://www.yavlena.com/bg/175265",
+      "captured": "2026-09-26",
+      "source_sha256": "21f76a07a379264615734de12f1b9cf4809ea1f54daef95172171dd94106e354",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "yavlena",
+      "fixture": "rent.html",
+      "source_url": "https://www.yavlena.com/bg/175702/rent",
+      "captured": "2026-09-26",
+      "source_sha256": "fe12eacae8835d077258b54255a77cd4ae222684e093703c8a022d11538bc010",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "home2u",
+      "fixture": "catalogue-sale.html",
+      "source_url": "https://home2u.bg/nedvizhimi-imoti-sofia/",
+      "captured": "2026-09-26",
+      "source_sha256": "4bfd5fcb8480aa1ef096a903e4c3ebf5aae551b663493c9cb46f261b73236cf7",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "home2u",
+      "fixture": "catalogue-sale-page2.json",
+      "source_url": "https://home2u.bg/wp-admin/admin-ajax.php?action=filter_properties&city=5&offer_type=352&properties_page=2&listing_type=list&lang=bg",
+      "captured": "2026-09-26",
+      "source_sha256": "ec6e5b2c33f3250d4e07aa5c4ad50e935e134e04f6a033bc94a1ddeaa90342f6",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "home2u",
+      "fixture": "catalogue-rent.html",
+      "source_url": "https://home2u.bg/apartamenti-pod-naem-sofia/",
+      "captured": "2026-09-26",
+      "source_sha256": "76d16bdb56efb072c3181ea44ffb986797276134ba9463a1349196b08f478ff0",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "home2u",
+      "fixture": "catalogue-rent-page2.json",
+      "source_url": "https://home2u.bg/wp-admin/admin-ajax.php?action=filter_properties&city=5&offer_type=353&properties_page=2&listing_type=list&lang=bg&property_type%5B%5D=48&property_type%5B%5D=12&property_type%5B%5D=11&property_type%5B%5D=20",
+      "captured": "2026-09-26",
+      "source_sha256": "8c63c764687f83442b43929d427c7faba2fd2e84f20755a2bd851e34780caeaa",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "home2u",
+      "fixture": "catalogue-rent-all.json",
+      "source_url": "https://home2u.bg/wp-admin/admin-ajax.php?action=filter_properties&city=5&offer_type=353&properties_page=1&listing_type=list&lang=bg",
+      "captured": "2026-09-26",
+      "source_sha256": "5ab502c0511789cfca1d244cd54d763ba3897c0c04009c79369759901988f052",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "home2u",
+      "fixture": "sale.html",
+      "source_url": "https://home2u.bg/property/2-staen-329df/",
+      "captured": "2026-09-26",
+      "source_sha256": "ebf3704a5e715d0819941df3563dcaa84c6049db193031adea0bb8f6880f19c4",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "home2u",
+      "fixture": "rent.html",
+      "source_url": "https://home2u.bg/property/parvi-naemateli-nov-2-staen-do-metro-miziya-i-nbu-napalno-obzaveden/",
+      "captured": "2026-09-26",
+      "source_sha256": "a91e8678200e1e2634c9f5eb4eeb76ecc5652145da8a38d3f58bdf621bb7b70a",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "home2u",
+      "fixture": "missing-title.html",
+      "source_url": "https://home2u.bg/property/ddb37/",
+      "captured": "2026-09-26",
+      "source_sha256": "6cf5e08445d9c8c5980f584243c1184d098546c1d9c95b701e2b80ef47ced450",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "luximmo",
+      "fixture": "catalogue-sale.html",
+      "source_url": "https://www.luximmo.bg/bulgaria/prodajba-sofiya/apartamenti/index.html",
+      "captured": "2026-09-26",
+      "source_sha256": "822b25a2fd23a79267f56b58c4eaa5cb116a2251c387986a8847f72089fa4f5c",
+      "source_encoding": "windows-1251"
+    },
+    {
+      "adapter": "luximmo",
+      "fixture": "catalogue-sale-page2.html",
+      "source_url": "https://www.luximmo.bg/bulgaria/prodajba-sofiya/apartamenti/index1.html",
+      "captured": "2026-09-26",
+      "source_sha256": "35b0bee456c574089aa0b7c004d50f327ba0e2cb2e48a7069ba701c28b64f205",
+      "source_encoding": "windows-1251"
+    },
+    {
+      "adapter": "luximmo",
+      "fixture": "catalogue-rent.html",
+      "source_url": "https://www.luximmo.bg/bulgaria/naem-sofiya/apartamenti/index.html",
+      "captured": "2026-09-26",
+      "source_sha256": "ed17206999d494d71d49e74ae01a855cf5a577332fbbce86a67cdf106d9975df",
+      "source_encoding": "windows-1251"
+    },
+    {
+      "adapter": "luximmo",
+      "fixture": "catalogue-all.html",
+      "source_url": "https://www.luximmo.bg/bulgaria/oblast-sofiya/sofiya-luksozni-imoti/index.html",
+      "captured": "2026-09-26",
+      "source_sha256": "594fb24cef9c8b6689b9c056b008024f51236e7b62f6baac77841b4781f3de57",
+      "source_encoding": "windows-1251"
+    },
+    {
+      "adapter": "luximmo",
+      "fixture": "sale.html",
+      "source_url": "https://www.luximmo.bg/bulgaria/oblast-sofia/sofiya/luksozni-imoti-mezoneti/luksozen-imot-34143-mezonet-za-prodajba-v-sofiya.html",
+      "captured": "2026-09-26",
+      "source_sha256": "85d6a82752439a9142494484ae06a257adef8cf9de16dbca8bba76335cd84ce4",
+      "source_encoding": "windows-1251"
+    },
+    {
+      "adapter": "luximmo",
+      "fixture": "rent.html",
+      "source_url": "https://www.luximmo.bg/bulgaria/oblast-sofia/sofiya/luksozni-imoti-tristayni-apartamenti/luksozen-imot-36646-tristaen-apartament-pod-naem-v-sofiya.html",
+      "captured": "2026-09-26",
+      "source_sha256": "db86e085461fce78eb57187e5c84f48a9b73bd8d780271bde66d54ee4589f71b",
+      "source_encoding": "windows-1251"
+    },
+    {
+      "adapter": "luximmo",
+      "fixture": "reserved.html",
+      "source_url": "https://www.luximmo.bg/bulgaria/oblast-sofia/sofiya/luksozni-imoti-tristayni-apartamenti/luksozen-imot-43073-tristaen-apartament-pod-naem-v-sofiya.html",
+      "captured": "2026-09-26",
+      "source_sha256": "b0161804660e55cb39ebaf76b51593008ddb7d87ab68975690cac27ec838af60",
+      "source_encoding": "windows-1251"
+    },
+    {
+      "adapter": "arco-real-estate",
+      "fixture": "catalogue-sale.html",
+      "source_url": "https://www.arcoreal.bg/%D0%BE%D1%84%D0%B5%D1%80%D1%82%D0%B8?t=2&c=1",
+      "captured": "2026-09-26",
+      "source_sha256": "5425a4cd7a1076372c46362c41651714bdd55afb1f9730fac383a467e79c6d8e",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "arco-real-estate",
+      "fixture": "catalogue-sale-page2.html",
+      "source_url": "https://www.arcoreal.bg/%D0%BE%D1%84%D0%B5%D1%80%D1%82%D0%B8?t=2&c=1&page=2&limit=10",
+      "captured": "2026-09-26",
+      "source_sha256": "83d8f0008c6677b6742506e1094bb3c5f16e317cebd7e0f597925399a7326a10",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "arco-real-estate",
+      "fixture": "catalogue-rent.html",
+      "source_url": "https://www.arcoreal.bg/%D0%BE%D1%84%D0%B5%D1%80%D1%82%D0%B8?t=4&c=1",
+      "captured": "2026-09-26",
+      "source_sha256": "0ae39463a09e061ffb64b3b833b0935ffa954880dca5fb0de877cfc0e9cf7136",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "arco-real-estate",
+      "fixture": "sale.html",
+      "source_url": "https://www.arcoreal.bg/%D0%BE%D1%84%D0%B5%D1%80%D1%82%D0%B8/%D0%9F%D1%80%D0%BE%D0%B4%D0%B0%D0%B2%D0%B0-3-%D1%81%D1%82%D0%B0%D0%B5%D0%BD-%D0%90%D0%BF%D0%B0%D1%80%D1%82%D0%B0%D0%BC%D0%B5%D0%BD%D1%82-%D0%A1%D0%BE%D1%84%D0%B8%D1%8F-(%D0%B3%D1%80%D0%B0%D0%B4)--%D0%93%D0%BE%D1%80%D0%BD%D0%B0-%D0%B1%D0%B0%D0%BD%D1%8F-91720",
+      "captured": "2026-09-26",
+      "source_sha256": "af7228c98dcbae4dc630bce8d682e283243a7634b25572eea71c63a3637a9fab",
+      "source_encoding": "utf-8"
+    },
+    {
+      "adapter": "arco-real-estate",
+      "fixture": "rent.html",
+      "source_url": "https://www.arcoreal.bg/%D0%BE%D1%84%D0%B5%D1%80%D1%82%D0%B8/%D0%9E%D1%82%D0%B4%D0%B0%D0%B2%D0%B0-%D0%BF%D0%BE%D0%B4-%D0%BD%D0%B0%D0%B5%D0%BC-%D0%9C%D0%BD%D0%BE%D0%B3%D0%BE%D1%81%D1%82%D0%B0%D0%B5%D0%BD-%D0%90%D0%BF%D0%B0%D1%80%D1%82%D0%B0%D0%BC%D0%B5%D0%BD%D1%82-%D0%A1%D0%BE%D1%84%D0%B8%D1%8F-(%D0%B3%D1%80%D0%B0%D0%B4)-%D0%BC.-%D0%93%D1%8A%D1%80%D0%B4%D0%BE%D0%B2%D0%B0-%D0%B3%D0%BB%D0%B0%D0%B2%D0%B0-91715",
+      "captured": "2026-09-26",
+      "source_sha256": "16a1b521d1ba006c6a3c9bce7438002dcdf2cfd3d8cdc31791023a71149b18f7",
+      "source_encoding": "utf-8"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Django settings for Varna Market.
+"""Django settings for Pocket Broker.
 
 One PostgreSQL database holds the whole market: offers crawled from vetted
 agency websites, the units and projects they collapse into, and the buyer
@@ -42,6 +42,12 @@ INSTALLED_APPS = [
     'sourcing',
     'market',
 ]
+
+# Preserve the audited live server's nginx TLS configuration when releasing V3.
+if env.get('DJANGO_BEHIND_PROXY', False, bool):
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -120,8 +126,8 @@ RUNS_DIR = DATA_DIR / 'runs'
 # EUR is canonical. Agencies still quote BGN often enough to matter.
 BGN_PER_EUR = 1.95583
 
-# The city this instance covers. Varna is the experiment; the schema is
-# national, so this is a setting and not an assumption baked into queries.
+# Legacy compatibility only. Public search uses City/OfferGeo and request scope.
+# Existing Varna crawler recipes remain Varna-scoped until source reconnaissance.
 MARKET_CITY = env.get('MARKET_CITY', 'Варна')
 
 CRAWL_USER_AGENT = env.get(

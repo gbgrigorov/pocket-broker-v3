@@ -5,6 +5,7 @@
 
 # Crawled data, images, page evidence. Large, regenerable, and not ours to redistribute.
 data/
+backups/
 *.sqlite3
 *.db
 
@@ -39,3 +40,7 @@ sourcing/data/agencies.json
 # part of the project — the durable versions live in market/ as commands.
 *_tmp.py
 upload/
+
+# collectstatic output. Generated on the server by deploy.sh and rsynced to
+# /var/www/pb3/static/; never edited by hand and never a source of truth.
+staticfiles/

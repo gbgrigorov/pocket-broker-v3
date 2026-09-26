@@ -1,0 +1,6 @@
+# Server-only dependencies. Kept out of requirements.txt because that file is
+# pinned line-for-line to ~/Dev/broker-crm, so a fix can move between the two
+# projects without a version difference being the reason it does not apply.
+# Nothing here is imported by the project; gunicorn only loads config.wsgi.
+-r requirements.txt
+gunicorn==23.0.0

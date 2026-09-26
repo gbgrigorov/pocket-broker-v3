@@ -22,3 +22,4 @@ class MarketConfig(AppConfig):
         sites.RECIPES.update(sites_varna.RECIPES)
         sites.NO_INDEX.update(sites_varna.NO_INDEX)
         sites.BLOCKED.update(sites_varna.BLOCKED)
+        from market import geography  # noqa: F401; register geography ingest hook

@@ -1,11 +1,104 @@
 # -*- coding: utf-8 -*-
 """Our own models. Vendored ones live in sourcing/ and crm/.
 
-Project / ProjectAlias / Unit / ProjectMembership (phase 5) and BuyerProfile
-(phase 6) arrive once the crawl has produced data to shape them against.
-SiteProbe comes first because nothing can be crawled before it is understood.
+Geography surrounds the vendored Offer without rewriting its identity. SiteProbe
+retains reconnaissance evidence. Physical Unit and buyer/partner models remain
+future phases.
 """
 from django.db import models
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
+
+
+class Country(models.Model):
+    code = models.CharField(max_length=2, unique=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class City(models.Model):
+    country = models.ForeignKey(Country, on_delete=models.PROTECT, related_name='cities')
+    slug = models.SlugField(max_length=80, unique=True)
+    name_bg = models.CharField(max_length=100)
+    name_en = models.CharField(max_length=100)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['name_bg']
+
+    def __str__(self):
+        return self.name_bg
+
+
+class Neighbourhood(models.Model):
+    city = models.ForeignKey(City, on_delete=models.PROTECT, related_name='neighbourhoods')
+    slug = models.SlugField(max_length=100)
+    name_bg = models.CharField(max_length=100)
+    name_en = models.CharField(max_length=100)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['name_bg']
+        constraints = [models.UniqueConstraint(fields=['city', 'slug'], name='neighbourhood_city_slug')]
+
+    def __str__(self):
+        return f'{self.city}: {self.name_bg}'
+
+
+class NeighbourhoodAlias(models.Model):
+    neighbourhood = models.ForeignKey(Neighbourhood, on_delete=models.CASCADE, related_name='aliases')
+    alias = models.CharField(max_length=160)
+    normalized_alias = models.CharField(max_length=160, db_index=True, editable=False)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['neighbourhood', 'normalized_alias'], name='neighbourhood_alias_unique')]
+
+    def save(self, *args, **kwargs):
+        from market.geography_seed_v1 import normalize
+        self.normalized_alias = normalize(self.alias)
+        if kwargs.get('update_fields') is not None:
+            kwargs['update_fields'] = set(kwargs['update_fields']) | {'normalized_alias'}
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.alias
+
+
+class OfferGeo(models.Model):
+    offer = models.OneToOneField('sourcing.Offer', on_delete=models.CASCADE, related_name='geo')
+    city = models.ForeignKey(City, null=True, blank=True, on_delete=models.PROTECT, related_name='offer_geographies')
+    neighbourhood = models.ForeignKey(Neighbourhood, null=True, blank=True, on_delete=models.PROTECT, related_name='offer_geographies')
+    raw_location = models.TextField(blank=True)
+    normalized_location = models.TextField(blank=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    confidence = models.DecimalField(max_digits=3, decimal_places=2, default=0,
+                                     validators=[MinValueValidator(0), MaxValueValidator(1)])
+    matched_by = models.CharField(max_length=40, default='unresolved')
+
+    class Meta:
+        indexes = [models.Index(fields=['city', 'neighbourhood'], name='offer_geo_city_neigh_idx')]
+        constraints = [
+            models.CheckConstraint(condition=models.Q(confidence__gte=0, confidence__lte=1), name='offer_geo_confidence_range'),
+            models.CheckConstraint(condition=models.Q(neighbourhood__isnull=True) | models.Q(city__isnull=False), name='offer_geo_neigh_has_city'),
+        ]
+
+    def clean(self):
+        if self.neighbourhood_id and self.neighbourhood.city_id != self.city_id:
+            raise ValidationError({'neighbourhood': 'Neighbourhood must belong to the selected city.'})
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.offer_id}: {self.city or "unresolved"}'
 
 
 class SiteProbe(models.Model):
@@ -23,6 +116,9 @@ class SiteProbe(models.Model):
         ('captcha', 'captcha'),         # explicit refusal; never worked around
         ('no_listings', 'no listings'),  # reachable, but no catalogue found
     ]
+    city = models.ForeignKey(City, null=True, blank=True, on_delete=models.PROTECT,
+                             related_name='site_probes')
+    strategy = models.JSONField(default=dict, blank=True)
 
     # Which sweep this row belongs to, and when that sweep STARTED.
     #
@@ -80,21 +176,30 @@ class SiteProbe(models.Model):
     def __str__(self):
         return f'{self.agency_slug} @ {self.probed_at:%Y-%m-%d} [{self.status}]'
 
-    @staticmethod
-    def current_run():
+    @classmethod
+    def for_city(cls, city='varna'):
+        # Legacy probes describe the original Varna registry. A new Sofia probe
+        # must never replace the strategy used by the existing Varna commands.
+        scope = models.Q(city__slug=city)
+        if city == 'varna':
+            scope |= models.Q(city__isnull=True)
+        return cls.objects.filter(scope)
+
+    @classmethod
+    def current_run(cls, city='varna'):
         """The most recently STARTED sweep, which is the only current one."""
-        row = SiteProbe.objects.order_by('-run_started').first()
+        row = cls.for_city(city).order_by('-run_started').first()
         return row.run_id if row else None
 
     @classmethod
-    def latest(cls):
+    def latest(cls, city='varna'):
         """One probe per agency, from the newest sweep, older runs filling gaps.
 
         Gap-filling matters because a sweep may skip an agency (--agency) and
         that agency's last known state is still the best we have.
         """
         out = {}
-        for probe in cls.objects.order_by('run_started', 'probed_at'):
+        for probe in cls.for_city(city).order_by('run_started', 'probed_at'):
             out[probe.agency_slug] = probe
         return out
 

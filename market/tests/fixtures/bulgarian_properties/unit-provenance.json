@@ -1,0 +1,14 @@
+{
+  "unit.html": {
+    "source_url": "https://www.bulgarianproperties.com/Apartments_(various_types)_in_Bulgaria/AD77779PL212960BG_Apartments_(various_types)_for_sale_in_Sofia.html",
+    "source_sha256": "d51b9e387c543bcec2a33c12baa85959b0f4705bce4c34331f44a5d5102725b1",
+    "captured": "2026-09-26",
+    "notes": "Reduced factual unit fields only; no descriptions or broker contacts."
+  },
+  "unit-price-list.html": {
+    "source_url": "https://www.bulgarianproperties.com/pdetail.php?IID=82111&xajax=1&scmd=propprice&searching=1&search_form=1&no_css_js=1&adm_ref=&search_type=0&search_status=0&search_min_area=&search_max_price=",
+    "source_sha256": "96b998c0884f9fca5fae004fd8591e19f6b10fab4f907858779758d84353e4db",
+    "captured": "2026-09-26",
+    "notes": "Reduced factual unit fields only; no descriptions or broker contacts."
+  }
+}

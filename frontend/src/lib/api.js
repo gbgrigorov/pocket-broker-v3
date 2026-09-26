@@ -12,8 +12,39 @@ export const api = {
   offers: (p) => get('/offers/', p),
   offer: (id) => get(`/offers/${id}/`),
   facets: (p) => get('/facets/', p),
-  agencies: () => get('/agencies/'),
-  stats: () => get('/stats/'),
+  agencies: (p) => get('/agencies/', p),
+  stats: (p) => get('/stats/', p),
+  cities: () => get('/cities/'),
+  neighbourhoods: (p) => get('/neighbourhoods/', p),
+  buyerOptions: () => get('/buyer/options/'),
+  matches: (profile, page = 1) => post('/buyer/matches/', { profile, page }),
+  wishlist: (ids) => post('/buyer/wishlist/', { ids }),
+}
+
+let csrfRequest
+async function post(path, payload) {
+  if (!csrfRequest) csrfRequest = get('/buyer/options/').catch((error) => {
+    csrfRequest = null
+    throw error
+  })
+  const { csrf_token } = await csrfRequest
+  const res = await fetch(`/api${path}`, {
+    method: 'POST', credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf_token },
+    body: JSON.stringify(payload),
+  })
+  if (res.status === 403) {
+    csrfRequest = null
+    throw new Error('Сесията е обновена. Опитайте отново.')
+  }
+  let data
+  try { data = await res.json() } catch {
+    throw new Error('Сървърът не може да отговори. Опитайте отново.')
+  }
+  if (!res.ok) {
+    throw new Error(data.error || 'Заявката не може да бъде изпълнена. Опитайте отново.')
+  }
+  return data
 }
 
 export function eur(n) {

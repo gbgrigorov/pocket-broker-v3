@@ -1,0 +1,143 @@
+{
+  "format_version": 1,
+  "created_on": "2026-09-25",
+  "provenance": "Sanitized, reduced fixtures extracted from saved Bulgarian Properties responses in data/recon/bulgarian-properties; no network access was used by the fixture task.",
+  "sanitization": {
+    "removed": [
+      "copyrighted listing descriptions and card summaries",
+      "broker names, images, office addresses, telephone numbers, and contact/request controls",
+      "unrelated navigation, scripts, styles, maps, amenities, and recommendations"
+    ],
+    "retained": [
+      "canonical URL",
+      "sanitized matching Product JSON-LD on detail pages",
+      "general information title, location, subtitle, and all original offer labels",
+      "selected characteristic label/value pairs",
+      "price and size markup",
+      "two real gallery image candidates per detail page",
+      "two real result cards, result count, and real pagination targets per catalogue page"
+    ]
+  },
+  "encoding_note": "The three detail sources were replaced with correctly decoded CP1252 refetches and contain no U+FFFD. The three saved catalogue sources still contain U+FFFD replacement characters from their earlier legacy-charset decode; those characters are deliberately preserved in affected fixture titles and recorded per fixture below.",
+  "fixtures": {
+    "sale.html": {
+      "original_url": "https://www.bulgarianproperties.com/1-bedroom_apartments_in_Bulgaria/AD91504BG_1-bedroom_apartment_for_sale_in_Sofia.html",
+      "status": 200,
+      "local_source": "data/recon/bulgarian-properties/600a25550adf.html",
+      "response_date": "2026-09-25T19:29:57Z",
+      "source_has_replacement_characters": false,
+      "expected": {
+        "reference": "Sfa 91504",
+        "price_eur": 275000,
+        "area_m2": 72.0,
+        "floor": 2,
+        "bedrooms": 1,
+        "city": "Sofia",
+        "type": "1-bedroom apartment",
+        "status": "for_sale",
+        "project": false
+      },
+      "inspection_notes": [
+        "The removed prose says total area 70 sq.m, while the characteristic and price sections both say 72.00 m2; expected area follows the structured page sections."
+      ],
+      "unknown_fields": []
+    },
+    "rent.html": {
+      "original_url": "https://www.bulgarianproperties.com/1-bedroom_apartments_in_Bulgaria/AD91674BG_1-bedroom_apartment_for_rent_in_Sofia.html",
+      "status": 200,
+      "local_source": "data/recon/bulgarian-properties/048f417e4a5b.html",
+      "response_date": "2026-09-25T19:29:53Z",
+      "source_has_replacement_characters": false,
+      "expected": {
+        "reference": "Sfa 91674",
+        "price_eur": 700,
+        "area_m2": 78.0,
+        "floor": 5,
+        "bedrooms": 1,
+        "city": "Sofia",
+        "type": "1-bedroom apartment",
+        "status": "for_rent",
+        "project": false
+      },
+      "unknown_fields": []
+    },
+    "project.html": {
+      "original_url": "https://www.bulgarianproperties.com/Apartments_(various_types)_in_Bulgaria/AD82111BG_Apartments_(various_types)_for_sale_in_Sofia.html",
+      "status": 200,
+      "local_source": "data/recon/bulgarian-properties/1bb816771929.html",
+      "response_date": "2026-09-25T19:29:55Z",
+      "source_has_replacement_characters": false,
+      "expected": {
+        "reference": "Sfa 82111",
+        "price_eur": null,
+        "price_low_eur": 252160,
+        "price_high_eur": 1732762,
+        "area_m2": null,
+        "area_min_m2": 65.38,
+        "area_max_m2": 314.59,
+        "floor": null,
+        "floor_range": "1-23 of 23",
+        "bedrooms": null,
+        "bedroom_options": [1, 2, 3],
+        "city": "Sofia",
+        "type": "Apartments (various types)",
+        "status": "for_sale",
+        "project": true,
+        "offer_type": "AggregateOffer"
+      },
+      "inspection_notes": [
+        "This is a multi-unit development with an AggregateOffer and ranges; it must not be emitted as a single unit listing."
+      ],
+      "unknown_fields": ["single_unit_price_eur", "single_unit_area_m2", "single_unit_floor", "single_unit_bedrooms"]
+    },
+    "catalogue.html": {
+      "original_url": "https://www.bulgarianproperties.com/Properties_in_the_town_of_Sofia/index.html",
+      "status": 200,
+      "local_source": "data/recon/bulgarian-properties/43dac1e29912.html",
+      "response_date": "2026-09-25T19:29:10Z",
+      "source_has_replacement_characters": true,
+      "expected": {
+        "result_count": 717,
+        "page": 1,
+        "cards": [
+          {"reference": "77779", "price_eur": 185874, "area_m2": 71.49, "floor": null, "bedrooms": null, "city": "Sofia", "type": "Apartments (various types)", "status": "for_sale", "project": true},
+          {"reference": "82111", "price_eur": 252160, "area_m2": 65.38, "floor": null, "bedrooms": null, "city": "Sofia", "type": "Apartments (various types)", "status": "for_sale", "project": true}
+        ]
+      },
+      "unknown_fields": ["cards[0].floor", "cards[0].bedrooms", "cards[1].floor", "cards[1].bedrooms"]
+    },
+    "catalogue_page2.html": {
+      "original_url": "https://www.bulgarianproperties.com/Properties_in_the_town_of_Sofia/index1.html",
+      "status": 200,
+      "local_source": "data/recon/bulgarian-properties/8ecf2162edaf.html",
+      "response_date": "2026-09-25T19:29:49Z",
+      "source_has_replacement_characters": true,
+      "expected": {
+        "result_count": 717,
+        "page": 2,
+        "cards": [
+          {"reference": "89685", "price_eur": 230000, "area_m2": 52.0, "floor": 4, "bedrooms": null, "city": "Sofia", "type": "Studio", "status": "for_sale", "project": false},
+          {"reference": "89431", "price_eur": 175000, "area_m2": 67.38, "floor": 6, "bedrooms": 1, "city": "Sofia", "type": "1-bedroom apartment", "status": "for_sale", "project": false}
+        ]
+      },
+      "inspection_notes": ["No bedroom count appears on the studio card; a parser may separately normalize Studio to zero bedrooms."],
+      "unknown_fields": ["cards[0].bedrooms"]
+    },
+    "catalogue_page3.html": {
+      "original_url": "https://www.bulgarianproperties.com/Properties_in_the_town_of_Sofia/index2.html",
+      "status": 200,
+      "local_source": "data/recon/bulgarian-properties/ce786d426c45.html",
+      "response_date": "2026-09-25T19:29:51Z",
+      "source_has_replacement_characters": true,
+      "expected": {
+        "result_count": 717,
+        "page": 3,
+        "cards": [
+          {"reference": "91578", "price_eur": 950, "area_m2": 90.0, "floor": 4, "bedrooms": 1, "city": "Sofia", "type": "1-bedroom apartment", "status": "for_rent", "project": false},
+          {"reference": "91589", "price_eur": 170000, "area_m2": 69.02, "floor": 2, "bedrooms": 1, "city": "Sofia", "type": "1-bedroom apartment", "status": "for_sale", "project": false}
+        ]
+      },
+      "unknown_fields": []
+    }
+  }
+}

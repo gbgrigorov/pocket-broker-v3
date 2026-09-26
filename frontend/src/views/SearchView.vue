@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
@@ -7,6 +7,7 @@ import Select from 'primevue/select'
 import Paginator from 'primevue/paginator'
 import Checkbox from 'primevue/checkbox'
 import OfferCard from '../components/OfferCard.vue'
+import WishlistButton from '../components/WishlistButton.vue'
 import { api } from '../lib/api'
 
 const route = useRoute()
@@ -21,6 +22,8 @@ const SORTS = [
 ]
 
 const f = reactive({
+  city: route.query.city,
+  neighbourhood: route.query.neighbourhood || null,
   deal: route.query.deal || 'sale',
   q: route.query.q || '',
   kind: route.query.kind || null,
@@ -38,35 +41,66 @@ const f = reactive({
 const data = ref({ results: [], total: 0, per_page: 24 })
 const facets = ref({ kinds: [], agencies: [], total: 0 })
 const loading = ref(true)
+const neighbourhoods = ref([])
+const error = ref('')
+let requestId = 0
 
 async function load() {
+  const request = ++requestId
   loading.value = true
+  error.value = ''
   const params = { ...f, with_photo: f.with_photo ? '1' : '' }
   try {
-    const [rows, fac] = await Promise.all([api.offers(params), api.facets({ deal: f.deal })])
+    const [rows, fac, places] = await Promise.all([
+      api.offers(params), api.facets({ deal: f.deal, city: f.city }),
+      api.neighbourhoods({ city: f.city }),
+    ])
+    if (request !== requestId) return
     data.value = rows
     facets.value = fac
+    neighbourhoods.value = places.neighbourhoods
+  } catch {
+    if (request === requestId) {
+      data.value = { results: [], total: 0, per_page: 24 }
+      error.value = 'Офертите не могат да бъдат заредени. Опитайте отново.'
+    }
   } finally {
-    loading.value = false
+    if (request === requestId) loading.value = false
   }
-  router.replace({
+}
+
+function navigate() {
+  const params = { ...f, with_photo: f.with_photo ? '1' : '' }
+  const query = Object.fromEntries(Object.entries(params).filter(([, v]) => v !== '' && v !== null))
+  if (new URLSearchParams(query).toString() === new URLSearchParams(route.query).toString()) {
+    load()
+    return
+  }
+  router.push({
     query: Object.fromEntries(
       Object.entries({ ...params, page: f.page }).filter(([, v]) => v !== '' && v !== null)
     ),
   })
 }
 
-function apply() { f.page = 1; load() }
+function apply() { f.page = 1; navigate() }
 function reset() {
   Object.assign(f, { q: '', kind: null, price_min: '', price_max: '', area_min: '',
-                     beds: '', agency: null, build: null, with_photo: false, page: 1 })
-  load()
+                     beds: '', agency: null, neighbourhood: null, build: null, with_photo: false, page: 1 })
+  navigate()
 }
-function onPage(e) { f.page = e.page + 1; load() }
+function onPage(e) { f.page = e.page + 1; navigate() }
 
-watch(() => [f.deal, f.sort, f.kind, f.agency, f.build, f.with_photo], apply)
-watch(() => route.query.q, (v) => { if (v !== undefined && v !== f.q) { f.q = v; apply() } })
-onMounted(load)
+watch(() => route.query, (q) => {
+  Object.assign(f, {
+    city: q.city, neighbourhood: q.neighbourhood || null, deal: q.deal || 'sale',
+    q: q.q || '', kind: q.kind || null, price_min: q.price_min || '', price_max: q.price_max || '',
+    area_min: q.area_min || '', beds: q.beds || '', agency: q.agency || null,
+    build: q.build || null, with_photo: q.with_photo === '1', sort: q.sort || 'newest',
+    page: Number(q.page || 1),
+  })
+  load()
+}, { immediate: true })
 </script>
 
 <template>
@@ -77,8 +111,15 @@ onMounted(load)
       </div>
       <div class="rail-body">
         <div class="seg">
-          <button :class="{ on: f.deal === 'sale' }" @click="f.deal = 'sale'">Продажби</button>
-          <button :class="{ on: f.deal === 'rent' }" @click="f.deal = 'rent'">Наеми</button>
+          <button :class="{ on: f.deal === 'sale' }" @click="f.deal = 'sale'; apply()">Продажби</button>
+          <button :class="{ on: f.deal === 'rent' }" @click="f.deal = 'rent'; apply()">Наеми</button>
+        </div>
+
+        <div>
+          <label class="field-label" for="neighbourhood">Квартал</label>
+          <Select v-model="f.neighbourhood" :options="neighbourhoods" option-label="name_bg"
+                  option-value="slug" input-id="neighbourhood" aria-label="Квартал" placeholder="всички" size="small"
+                  show-clear fluid @update:model-value="apply" />
         </div>
 
         <div>
@@ -87,7 +128,7 @@ onMounted(load)
             <button
               v-for="b in facets.build || []" :key="b.key"
               :class="{ on: f.build === b.key }"
-              @click="f.build = f.build === b.key ? null : b.key"
+              @click="f.build = f.build === b.key ? null : b.key; apply()"
             >
               <span>{{ b.label }}</span><span class="n">{{ b.count }}</span>
             </button>
@@ -100,7 +141,7 @@ onMounted(load)
             <button
               v-for="k in facets.kinds" :key="k.key"
               :class="{ on: f.kind === k.key }"
-              @click="f.kind = f.kind === k.key ? null : k.key"
+              @click="f.kind = f.kind === k.key ? null : k.key; apply()"
             >
               <span>{{ k.label }}</span><span class="n">{{ k.count }}</span>
             </button>
@@ -131,18 +172,19 @@ onMounted(load)
           <Select
             v-model="f.agency" :options="facets.agencies" option-label="agency__name"
             option-value="agency__slug" placeholder="всички" size="small" show-clear fluid
+            @update:model-value="apply"
           />
         </div>
 
         <label class="row small" style="cursor: pointer">
-          <Checkbox v-model="f.with_photo" binary input-id="photo" />
+          <Checkbox v-model="f.with_photo" binary input-id="photo" @update:model-value="apply" />
           <span>само със снимка</span>
         </label>
 
         <Button label="Търси" icon="pi pi-search" size="small" @click="apply" />
 
         <p class="rail-note">
-          Непопълнено поле никога не изважда оферта от резултатите — отбелязва се на картата.
+          В избрания град липсващите характеристики и неизвестният квартал остават в резултатите.
         </p>
       </div>
     </aside>
@@ -153,22 +195,29 @@ onMounted(load)
           {{ f.deal === 'rent' ? 'Имоти под наем' : 'Имоти за продажба' }}
           <span class="count mono-num">· {{ data.total.toLocaleString('bg-BG') }}</span>
         </h1>
-        <Select v-model="f.sort" :options="SORTS" option-label="label" option-value="value" size="small" />
+        <Select v-model="f.sort" :options="SORTS" option-label="label" option-value="value" size="small" @update:model-value="apply" />
       </div>
 
       <div v-if="loading" class="loading">
         <i class="pi pi-spin pi-spinner" style="font-size: 1.5rem; color: #94a3b8" />
       </div>
 
+      <div v-else-if="error" class="card empty" role="alert">
+        <p>{{ error }}</p><Button label="Опитай отново" @click="load" />
+      </div>
+
       <div v-else-if="!data.results.length" class="card empty">
         <i class="pi pi-inbox" style="font-size: 1.6rem; color: #b6c2d1" />
         <p class="muted">Няма оферти, които отговарят на тези филтри.</p>
+        <p v-if="f.city === 'sofia'" class="small faint">Подготвяме проверени оферти за София.</p>
         <Button label="Изчисти филтрите" size="small" severity="secondary" outlined @click="reset" />
       </div>
 
       <template v-else>
         <div class="list">
-          <OfferCard v-for="o in data.results" :key="o.id" :offer="o" />
+          <article v-for="o in data.results" :key="o.id" class="buyer-match-card">
+            <OfferCard :offer="o" /><div class="buyer-match-details"><WishlistButton :offer="o" /></div>
+          </article>
         </div>
         <Paginator
           :rows="data.per_page" :total-records="data.total"

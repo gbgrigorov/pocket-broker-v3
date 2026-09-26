@@ -1,4 +1,21 @@
-# Varna Market — a verified-supply property search
+# Pocket Broker — implementation plan
+
+## Sofia expansion checkpoint (2026-09-26)
+
+The historical plan below records the original Varna work and its crawler
+lessons; it is not the current implementation status. Follow
+[ARCHITECTURE-SOFIA.md](ARCHITECTURE-SOFIA.md) and [CURRENT-STATE.md](CURRENT-STATE.md).
+
+Geography and city-scoped search are deployed. The buyer profile, explained
+matches and browser-persistent wishlist were implemented at the user's request.
+The Sofia cohort is now five verified sources with fixture-tested adapters,
+city-specific probes and quality metrics. The first sample contained 87 offers;
+the full backfill is complete with 8,170 active Sofia listings and includes BP
+development-unit availability tables. See [the import audit](SOFIA-FULL-CATALOG-2026-09-26.md)
+and [sofia-crawl-map.md](sofia-crawl-map.md).
+Automatic scheduling and missing-offer retirement remain separate work.
+Accounts, cross-device saved profiles, partner memberships and consented leads
+remain future scope; anonymous browser preferences already work.
 
 ## Context
 

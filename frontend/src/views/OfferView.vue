@@ -1,15 +1,19 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import { api, eur, num } from '../lib/api'
 import { completenessOf } from '../theme'
+import WishlistButton from '../components/WishlistButton.vue'
 
 const route = useRoute()
+const router = useRouter()
 const offer = ref(null)
 const loading = ref(true)
 const index = ref(0)
 const broken = ref(false)
+const error = ref('')
+let requestId = 0
 
 const images = computed(() => offer.value?.images || [])
 const tone = computed(() => completenessOf(offer.value?.missing || []))
@@ -21,10 +25,24 @@ const perM2 = computed(() => {
 })
 
 async function load() {
+  const request = ++requestId
   loading.value = true
+  error.value = ''
   index.value = 0
   broken.value = false
-  try { offer.value = await api.offer(route.params.id) } finally { loading.value = false }
+  try {
+    const result = await api.offer(route.params.id)
+    if (request !== requestId) return
+    offer.value = result
+    if (result.city && result.city !== route.query.city) {
+      router.replace({ query: { ...route.query, city: result.city } })
+    }
+  } catch {
+    if (request === requestId) {
+      offer.value = null
+      error.value = 'Офертата не е налична или не може да бъде заредена.'
+    }
+  } finally { if (request === requestId) loading.value = false }
 }
 function step(d) {
   const n = images.value.length
@@ -40,6 +58,8 @@ watch(() => route.params.id, load)
   <div v-if="loading" class="page loading">
     <i class="pi pi-spin pi-spinner" style="font-size: 1.5rem; color: #94a3b8" />
   </div>
+
+  <p v-else-if="error" class="page" role="alert">{{ error }}</p>
 
   <div v-else-if="offer" class="page grid-2">
     <section class="card">
@@ -90,6 +110,7 @@ watch(() => route.params.id, load)
           </span>
         </p>
 
+        <WishlistButton :offer="offer" style="margin-top: 1rem" />
         <Button
           as="a" :href="offer.url" target="_blank" rel="noopener" class="detail-cta"
           label="Отвори обявата при агенцията" icon="pi pi-external-link" size="small"
@@ -110,7 +131,7 @@ watch(() => route.params.id, load)
               <b class="mono-num">{{ offer.price ? eur(offer.price) : '—' }}</b>
             </li>
             <li v-for="s in offer.siblings" :key="s.id" class="spread-row">
-              <RouterLink class="truncate" :to="`/imot/${s.id}`">{{ s.agency.name }}</RouterLink>
+              <RouterLink class="truncate" :to="{ name: 'offer', params: { id: s.id }, query: { city: s.city } }">{{ s.agency.name }}</RouterLink>
               <b class="mono-num">{{ s.price ? eur(s.price) : '—' }}</b>
             </li>
           </ul>

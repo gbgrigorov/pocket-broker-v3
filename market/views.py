@@ -19,6 +19,8 @@ from django.db.models import Count, F, Q
 from django.shortcuts import get_object_or_404, render
 
 from sourcing.models import Agency, Offer
+from market.geography import siblings_for
+from market.api import _scope
 
 PER_PAGE = 24
 
@@ -46,13 +48,14 @@ KIND_LABELS = {'apartment': 'Апартаменти', 'house': 'Къщи',
 def _live():
     return (Offer.objects.filter(is_active=True)
             .exclude(listing_url='')
-            .select_related('agency')
+            .select_related('agency', 'geo__city', 'geo__neighbourhood')
             .prefetch_related('images'))
 
 
 def _apply(request, queryset):
     """Filters. Each one keeps rows whose value is unknown -- see module docstring."""
     get = request.GET.get
+    queryset = _scope(request, queryset)
     applied = {}
 
     deal = get('deal') or 'sale'
@@ -152,7 +155,7 @@ def offer(request, pk):
     # the most interesting number on this page.
     siblings = []
     if row.dedup_key:
-        siblings = list(_live().filter(dedup_key=row.dedup_key).exclude(pk=row.pk))
+        siblings = list(siblings_for(row, _live())[:PER_PAGE])
     prices = [o.price_eur for o in [row] + siblings if o.price_eur]
     spread = (max(prices) - min(prices)) if len(prices) > 1 else None
     return render(request, 'market/offer.html', {

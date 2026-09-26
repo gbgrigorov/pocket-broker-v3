@@ -50,6 +50,10 @@ EXCLUDE = (
 # path -> why it deliberately differs from upstream. Anything listed here is
 # checked for *presence*, not for byte-identity.
 DIVERGENCES = {
+    'crm/dedup.py':
+        'Multi-city expansion: fuzzy candidates must share a resolved OfferGeo '
+        'city with the reference offer. Stored dedup keys and supply identity '
+        'are unchanged; unresolved city cannot produce siblings.',
     'sourcing/web/fetch.py':
         "Upstream hardcodes the user agent 'BrokerCRM/1.0 "
         "(+https://bg-apartment.com)'. Shipping that would identify our crawler "
